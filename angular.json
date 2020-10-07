@@ -1,6 +1,6 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
-  "version": 1, 
+  "version": 1,
   "newProjectRoot": "projects",
   "projects": {
     "json-mapper": {
@@ -123,6 +123,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "json-mapper"
+    }
+  },
+  "defaultProject": "json-mapper",
+  "cli": {
+    "analytics": "13ac8212-2d37-4e16-9864-9c4b601a39ef"
+  }
 }

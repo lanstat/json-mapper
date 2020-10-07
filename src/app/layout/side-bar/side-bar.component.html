@@ -1,0 +1,15 @@
+<div class="columns">
+    <div class="column">
+        <button class="button">Add table</button>
+    </div>
+</div>
+<div class="columns">
+    <div class="column">
+        <ngx-treeview-select
+            [config]="config"
+            [items]="items"
+            (valueChange)="onSelectedChange($event)"
+        >
+        </ngx-treeview-select>
+    </div>
+</div>
