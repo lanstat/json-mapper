@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { TreeviewItem } from 'ngx-treeview';
+import { Collection, CollectionType } from 'src/app/shared/models/collection';
+import { CollectionService } from 'src/app/shared/services/collection.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -7,7 +9,6 @@ import { TreeviewItem } from 'ngx-treeview';
   styleUrls: ['./side-bar.component.scss']
 })
 export class SideBarComponent implements OnInit {
-  tables: any[] = [];
   config = {
     hasAllCheckBox: false,
     hasFilter: false,
@@ -15,53 +16,40 @@ export class SideBarComponent implements OnInit {
     decoupleChildFromParent: false,
     maxHeight: 500
   };
+  
+  items: TreeviewItem[] = [];
 
-  items = [new TreeviewItem({
-    text: "IT",
-    value: 9,
-    children: [
-      {
-        text: "Programming",
-        value: 91,
-        children: [
-          {
-            text: "Frontend",
-            value: 911,
-            children: [
-              { text: "Angular 1", value: 9111 },
-              { text: "Angular 2", value: 9112 },
-              { text: "ReactJS", value: 9113 },
-            ],
-          },
-          {
-            text: "Backend",
-            value: 912,
-            children: [
-              { text: "C#", value: 9121 },
-              { text: "Java", value: 9122 },
-              { text: "Python", value: 9123, checked: false },
-            ],
-          },
-        ],
-      },
-      {
-        text: "Networking",
-        value: 92,
-        children: [
-          { text: "Internet", value: 921 },
-          { text: "Security", value: 922 },
-        ],
-      },
-    ],
-  })];
-
-  constructor() { }
+  constructor(private _collections: CollectionService) { }
 
   ngOnInit(): void {
+    this._collections.onCollectionChange().subscribe((collections)=> {
+      this.items = [];
+      this.transformToTreeview(collections, this.items);
+    });
   }
 
-  onSelectedChange(evt: any) {
-    console.log(evt);
+  private transformToTreeview(collections: Collection[], items: TreeviewItem[]) {
+    for (let item of collections) {
+      if (item.type == CollectionType.PRIMITIVE) {
+        continue;
+      }
 
+      let instance = new TreeviewItem({text: item.name, value: item});
+      let children = [];
+      this.transformToTreeview(item.fields, children);
+
+      if (children.length > 0) {
+        instance.children = children;
+      }
+      items.push(instance);
+    }
+  }
+
+  treeviewChange(evt: any) {
+    console.log(evt);
+  }
+
+  addCollection() {
+    this._collections.add(new Collection('asdasd',  'asdasd', CollectionType.PRIMITIVE));
   }
 }

@@ -1,6 +1,6 @@
 <div class="columns">
     <div class="column">
-        <button class="button">Add table</button>
+        <button class="button" (click)="addCollection()">Add table</button>
     </div>
 </div>
 <div class="columns">
@@ -8,7 +8,7 @@
         <ngx-treeview-select
             [config]="config"
             [items]="items"
-            (valueChange)="onSelectedChange($event)"
+            (valueChange)="treeviewChange($event)"
         >
         </ngx-treeview-select>
     </div>
