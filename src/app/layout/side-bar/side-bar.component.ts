@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { TreeviewItem } from 'ngx-treeview';
+import { ListComponent } from 'src/app/shared/components/list/list.component';
 import { Collection, CollectionType } from 'src/app/shared/models/collection';
 import { CollectionService } from 'src/app/shared/services/collection.service';
+import { SchemaStoreService } from 'src/app/shared/services/schema-store.service';
+import { ViewManagerService } from 'src/app/shared/services/view-manager.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -19,13 +22,9 @@ export class SideBarComponent implements OnInit {
   
   items: TreeviewItem[] = [];
 
-  constructor(private _collections: CollectionService) { }
+  constructor(private schema: SchemaStoreService, private _viewManager: ViewManagerService) { }
 
   ngOnInit(): void {
-    this._collections.onCollectionChange().subscribe((collections)=> {
-      this.items = [];
-      this.transformToTreeview(collections, this.items);
-    });
   }
 
   private transformToTreeview(collections: Collection[], items: TreeviewItem[]) {
@@ -46,10 +45,8 @@ export class SideBarComponent implements OnInit {
   }
 
   treeviewChange(evt: any) {
-    console.log(evt);
-  }
-
-  addCollection() {
-    this._collections.add(new Collection('asdasd',  'asdasd', CollectionType.PRIMITIVE));
+    this._viewManager.show({
+      component: ListComponent
+    })
   }
 }

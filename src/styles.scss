@@ -2,3 +2,11 @@
 
 
 @import './theme/components/treeview.scss';
+
+$widthUnit: "%"; // Add the unit here (rem|em|px|%)
+
+@for $i from 1 through 12 {
+	.table thead th.is-#{$i} {
+		width: #{($i/12)*100}#{$widthUnit} !important;
+	}
+}
