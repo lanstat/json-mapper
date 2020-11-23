@@ -45,8 +45,8 @@ export class SideBarComponent implements OnInit {
   }
 
   treeviewChange(evt: any) {
-    this._viewManager.show({
-      component: ListComponent
-    })
+    // this._viewManager.show({
+    //   component: ListComponent
+    // })
   }
 }

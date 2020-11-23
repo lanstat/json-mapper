@@ -1,0 +1,9 @@
+<button class="button">Guardar</button>
+
+<div class="select">
+    <select [(ngModel)]="form.key" (change)="onChangeProperty()">
+      <option *ngFor="let option of properties" value="{{option}}">{{option}}</option>
+    </select>
+</div>
+
+<input class="input" type="text" [(ngModel)]="form.value">

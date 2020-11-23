@@ -7,11 +7,12 @@ import { AdDirective } from './directives/ad.directive';
 import { BlankComponent } from './components/blank/blank.component';
 import { ListComponent } from './components/list/list.component';
 import { ObjectComponent } from './components/object/object.component';
+import { ObjectFieldComponent } from './components/object-field/object-field.component';
 
 
 
 @NgModule({
-  declarations: [TreeviewSelectComponent, AdDirective, BlankComponent, ListComponent, ObjectComponent],
+  declarations: [TreeviewSelectComponent, AdDirective, BlankComponent, ListComponent, ObjectComponent, ObjectFieldComponent],
   imports: [
     CommonModule,
     TreeviewModule.forRoot(),

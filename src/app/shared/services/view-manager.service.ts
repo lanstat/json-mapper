@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable, Subscriber } from 'rxjs';
 import { BlankComponent } from '../components/blank/blank.component';
 import { ViewComponent } from '../models/view';
+import { SchemaStoreService } from './schema-store.service';
 
 @Injectable({
   providedIn: 'root'
@@ -10,9 +11,10 @@ export class ViewManagerService {
   private _currentView: ViewComponent;
   private _currentObserver: Subscriber<unknown>;
 
-  constructor() { 
+  constructor(private schema: SchemaStoreService) { 
     this._currentView = {
-      component: BlankComponent
+      component: BlankComponent,
+      schema: null
     };
   }
 
@@ -29,6 +31,10 @@ export class ViewManagerService {
         unsubscribe() {
         }
       };
-  });
+    });
+  }
+
+  getCurrentProperty() {
+    return this.schema.getSchema();
   }
 }

@@ -1,5 +1,6 @@
+import { PropertyRead } from '@angular/compiler';
 import { Injectable } from '@angular/core';
-import { Schema } from '../models/schemastore';
+import { Property, Schema } from '../models/schemastore';
 
 @Injectable({
   providedIn: 'root'
@@ -11,5 +12,9 @@ export class SchemaStoreService {
 
   load(text: string) {
     this.schema = JSON.parse(text);
+  }
+
+  getSchema() {
+    return this.schema;
   }
 }

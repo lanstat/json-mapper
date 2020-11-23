@@ -137,7 +137,8 @@ export class TopBarComponent implements OnInit {
       }
     }`);
     this.viewManager.show({
-      component: ObjectComponent
+      component: ObjectComponent,
+      schema: this.schema.getSchema()
     });
   }
 
