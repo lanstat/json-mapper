@@ -9,14 +9,14 @@
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>1</td>
-                <td>asd</td>
+              <tr *ngFor="let record of current | keyvalue">
+                <td>{{record.key}}</td>
+                <td>{{record.value}}</td>
               </tr>
             </tbody>
         </table>
     </div>
     <div class="column">
-        <app-object-field [schema]="currentSchema"></app-object-field>
+        <app-object-data [schema]="currentSchema" (changeValueEvent)="onRecordStore($event)"></app-object-data>
     </div>
 </div>

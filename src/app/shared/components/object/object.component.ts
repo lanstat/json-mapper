@@ -7,13 +7,16 @@ import { SchemaBase } from 'src/app/core/SchemaBase';
   styleUrls: ['./object.component.scss']
 })
 export class ObjectComponent extends SchemaBase implements OnInit {
+  current: {[id:string]: any} = {};
 
   constructor() { 
     super();
   }
 
   ngOnInit(): void {
-    console.log(this.currentSchema);
   }
 
+  onRecordStore(evt: {key: string, value: any}) {
+    this.current[evt.key] = evt.value;
+  }
 }
