@@ -1,6 +1,6 @@
-import { PropertyRead } from '@angular/compiler';
 import { Injectable } from '@angular/core';
-import { Property, Schema } from '../models/schemastore';
+import { Schema, Property } from '../models/schemastore';
+import {PropertyDefinition} from '../models/collection';
 
 @Injectable({
   providedIn: 'root'
@@ -10,11 +10,29 @@ export class SchemaStoreService {
 
   constructor() { }
 
-  load(text: string) {
+  load(text:string) {
     this.schema = JSON.parse(text);
   }
 
   getSchema() {
     return this.schema;
+  }
+
+  getDefinition(current: Property, key: string) {
+    let tmp = current.properties[key];
+    if (tmp.$ref) {
+      let pointer: any = null;
+      let parts = tmp.$ref.split('/');
+      for (let part of parts) {
+        if(part === '#') {
+          pointer = this.schema;
+        } else {
+          pointer = pointer[part];
+        }
+      }
+
+      tmp = Object.assign(pointer, tmp);
+    }
+    return new PropertyDefinition(tmp);
   }
 }

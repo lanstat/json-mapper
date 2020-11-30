@@ -1,15 +1,13 @@
-export class Collection {
-    public fields: Collection[] = [];
+import {Property} from './schemastore';
 
-    public constructor(
-        public name: string,
-        public description: string,
-        public type: CollectionType
-    ){};
-}
+export class PropertyDefinition {
+  public constructor(private property: Property) {
 
-export enum CollectionType {
-    PRIMITIVE,
-    OBJECT,
-    ARRAY
+  }
+
+  private init() {
+    if (this.property.$ref) {
+
+    }
+  }
 }

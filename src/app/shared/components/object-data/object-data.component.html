@@ -13,16 +13,30 @@
   <ng-template [ngIf]="currentProperty">
     <div class="field">
       <label class="label">Valor</label>
-      <div class="control">
-        <ng-template [ngIf]="renderType == 1">
-          <app-enum-field formControlName="value" [items]="currentProperty.enum"></app-enum-field>
-        </ng-template>
-        <ng-template [ngIf]="renderType == 2">
-          <app-input-field formControlName="value"></app-input-field>
-        </ng-template>
-        <ng-template [ngIf]="renderType == 3">
-          <app-boolean-field formControlName="value"></app-boolean-field>
-        </ng-template>
+      <div *ngIf="canSelectMultiple" class="field is-grouped">
+        <div class="control">
+          <button type="button" (click)="addValue()" class="button is-link">Agregar</button>
+        </div>
+      </div>
+      <div formArrayName="values">
+        <div class="columns" *ngFor="let control of values.controls; let i=index">
+          <div class="column is-four-fifths">
+            <div class="control">
+              <ng-template [ngIf]="renderType == 1">
+                <app-enum-field [formControlName]="i" [items]="currentProperty.enum"></app-enum-field>
+              </ng-template>
+              <ng-template [ngIf]="renderType == 2">
+                <app-input-field [formControlName]="i"></app-input-field>
+              </ng-template>
+              <ng-template [ngIf]="renderType == 3">
+                <app-boolean-field [formControlName]="i"></app-boolean-field>
+              </ng-template>
+            </div>
+          </div>
+          <div *ngIf="canSelectMultiple" class="column">
+            <button class="button" type="button">Trash</button>
+          </div>
+        </div>
       </div>
     </div>
     <div class="field is-grouped">

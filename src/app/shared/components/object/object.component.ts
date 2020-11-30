@@ -9,14 +9,14 @@ import { SchemaBase } from 'src/app/core/SchemaBase';
 export class ObjectComponent extends SchemaBase implements OnInit {
   current: {[id:string]: any} = {};
 
-  constructor() { 
+  constructor() {
     super();
   }
 
   ngOnInit(): void {
   }
 
-  onRecordStore(evt: {key: string, value: any}) {
-    this.current[evt.key] = evt.value;
+  onRecordStore(evt: {key: string, values: any}) {
+    this.current[evt.key] = evt.values;
   }
 }

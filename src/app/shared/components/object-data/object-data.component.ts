@@ -1,6 +1,7 @@
 import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
-import { FormControl, FormGroup } from '@angular/forms';
+import { FormControl, FormGroup, FormArray, FormBuilder } from '@angular/forms';
 import { Property } from '../../models/schemastore';
+import {SchemaStoreService} from '../../services/schema-store.service';
 
 @Component({
   selector: 'app-object-data',
@@ -14,48 +15,78 @@ export class ObjectDataComponent implements OnInit {
   @Output()
   changeValueEvent = new EventEmitter<{
     key: string,
-    value: any
+    values: any
   }>();
 
   currentProperty: Property;
   renderType: number;
+  canSelectMultiple: boolean;
 
   form: FormGroup;
 
-  constructor() { }
-
-  ngOnInit(): void {
-    this.form = new FormGroup({
-      key: new FormControl(null),
-      value: new FormControl(null)
+  constructor(
+    private formBuilder: FormBuilder,
+    private schemaService: SchemaStoreService
+  ) {
+    this.form = this.formBuilder.group({
+      key: null,
+      values: this.formBuilder.array([])
     });
+  }
+
+  ngOnInit(): void {}
+
+  get values(): FormArray {
+    return this.form.get('values') as FormArray;
+  }
+
+  get key(): FormControl {
+    return this.form.get('key') as FormControl;
+  }
+
+  addValue() {
+    this.values.push(new FormControl());
   }
 
   onChangeProperty() {
-    this.currentProperty = this.schema.properties[this.form.get('key').value];
-    this.renderType = this.getRenderType();
-  }
-
-  canSelectMultiple() {
-    return Array.isArray(this.currentProperty.type);
+    this.currentProperty = this.schemaService.getDefinition(this.schema, this.key.value);
+    this.parseRenderType();
+    this.values.clear();
+    if (!this.canSelectMultiple) {
+      this.values.push(new FormControl(null));
+    }
   }
 
   onSubmit(evt: any) {
-    console.log(this.form.get('value'));
+    let tmp: any;
+
+    if (this.canSelectMultiple) {
+      tmp = [];
+      for (let control of this.values.controls) {
+        tmp.push(control.value);
+      }
+    } else {
+      tmp = null;
+      for (let control of this.values.controls) {
+        tmp = control.value;
+      }
+    }
+
     this.changeValueEvent.emit({
       key: this.form.get('key').value,
-      value: this.form.get('value').value
+      values: tmp
     });
   }
 
-  private getRenderType(): number {
+  private parseRenderType() {
+    this.canSelectMultiple = Array.isArray(this.currentProperty.type);
     if (this.currentProperty.enum) {
-      return 1;
+      this.renderType = 1;
     } else {
       if (this.currentProperty.type == 'string') {
-        return 2;       
+        this.renderType = 2;
       } else if (this.currentProperty.type == 'boolean') {
-        return 3;
+        this.renderType = 3;
       }
     }
   }
