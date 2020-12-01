@@ -18,7 +18,7 @@ export class SchemaStoreService {
     return this.schema;
   }
 
-  getDefinition(current: Property, key: string) {
+  getDefinition(current: Property, key: string): PropertyDefinition {
     let tmp = current.properties[key];
     if (tmp.$ref) {
       let pointer: any = null;

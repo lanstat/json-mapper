@@ -2,6 +2,7 @@ import { Component, Input, OnInit, Output, EventEmitter } from '@angular/core';
 import { FormControl, FormGroup, FormArray, FormBuilder } from '@angular/forms';
 import { Property } from '../../models/schemastore';
 import {SchemaStoreService} from '../../services/schema-store.service';
+import {PropertyDefinition} from '../../models/collection';
 
 @Component({
   selector: 'app-object-data',
@@ -18,9 +19,8 @@ export class ObjectDataComponent implements OnInit {
     values: any
   }>();
 
-  currentProperty: Property;
+  definition: PropertyDefinition;
   renderType: number;
-  canSelectMultiple: boolean;
 
   form: FormGroup;
 
@@ -49,10 +49,9 @@ export class ObjectDataComponent implements OnInit {
   }
 
   onChangeProperty() {
-    this.currentProperty = this.schemaService.getDefinition(this.schema, this.key.value);
-    this.parseRenderType();
+    this.definition = this.schemaService.getDefinition(this.schema, this.key.value);
     this.values.clear();
-    if (!this.canSelectMultiple) {
+    if (!this.definition.canSelectMultiple) {
       this.values.push(new FormControl(null));
     }
   }
@@ -60,7 +59,7 @@ export class ObjectDataComponent implements OnInit {
   onSubmit(evt: any) {
     let tmp: any;
 
-    if (this.canSelectMultiple) {
+    if (this.definition.canSelectMultiple) {
       tmp = [];
       for (let control of this.values.controls) {
         tmp.push(control.value);
@@ -77,18 +76,4 @@ export class ObjectDataComponent implements OnInit {
       values: tmp
     });
   }
-
-  private parseRenderType() {
-    this.canSelectMultiple = Array.isArray(this.currentProperty.type);
-    if (this.currentProperty.enum) {
-      this.renderType = 1;
-    } else {
-      if (this.currentProperty.type == 'string') {
-        this.renderType = 2;
-      } else if (this.currentProperty.type == 'boolean') {
-        this.renderType = 3;
-      }
-    }
-  }
-
 }
